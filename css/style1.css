@@ -8696,6 +8696,7 @@ select {
 
     .pet-image-carousel img {
         object-fit: contain;
+        object-position: center;
     }
 
     .paw-intro-image img,
@@ -8787,4 +8788,31 @@ select {
 .slicknav_nav li > a.active,
 .slicknav_nav li > .slicknav_item.active {
     color: #f4b400 !important;
+}
+@media (max-width: 767px) {
+
+    .carousel-wrapper {
+        height: 225px;
+        background-color: #8B5A2B;
+        overflow: hidden;
+    }
+
+    .carousel-slide {
+        height: 225px;
+    }
+
+    .carousel-slide > img {
+        width: 100%;
+        height: auto;
+        max-height: 170px;
+        object-fit: contain !important;
+        object-position: center top !important;
+        display: block;
+    }
+
+    .slider_overlay {
+        top: 0;
+        height: 170px;
+    }
+
 }
