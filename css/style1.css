@@ -3091,6 +3091,7 @@ h3 {
   padding: 160px 0;
   background-position: bottom;
   background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 @media (max-width: 767px) {
@@ -3327,7 +3328,7 @@ h3 {
   z-index: 1042;
   overflow: hidden;
   position: fixed;
-  background: #4A3600;
+  background: #8B5A2B;
   opacity: 0.6;
 }
 
@@ -3453,7 +3454,7 @@ h3 {
 
 /* line 1, ../../Arafath/CL/january 2020/240. Animal/HTML/scss/_anipat.scss */
 .anipat_bg_1 {
-  background-image: url(../img/banner/contact_bg.png);
+  background:#663010;
 }
 
 /* line 5, ../../Arafath/CL/january 2020/240. Animal/HTML/scss/_anipat.scss */
@@ -7275,7 +7276,7 @@ select {
 }
 
 .anipat_bg_1 {
-    background: linear-gradient(to bottom,#D66B0B,#611B02);
+    background: #663010;
 }
 
 /* ---------------------------------------------------------------------
@@ -8815,4 +8816,13 @@ select {
         height: 170px;
     }
 
+}
+.breadcam_bg {
+    position: relative;
+    width: 100%;
+    height: clamp(330px, 32vw, 380px);
+    overflow: hidden;
+    border-radius: 0 0 50% 50% / 0 0 13% 13%;
+    /* background: linear-gradient(to bottom, #F28C28, #8B4513); */
+    background: #663010
 }
