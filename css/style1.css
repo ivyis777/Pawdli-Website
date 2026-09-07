@@ -8706,3 +8706,85 @@ select {
         object-fit: contain;
     }
 }
+.submenu {
+    display: none;
+}
+
+.submenu.show {
+    display: block;
+}
+@media (max-width: 767px) {
+
+    /* Keep Pages aligned with other main menu items */
+    .slicknav_nav .slicknav_parent > .slicknav_item {
+        padding-left: 25px !important;
+        margin-left: 0 !important;
+    }
+
+    /* Keep the actual Pages text aligned */
+    .slicknav_nav .slicknav_parent > .slicknav_item > a {
+        padding-left: 0 !important;
+        margin-left: 0 !important;
+    }
+
+}
+/* Coming Soon Message */
+.coming-soon-message {
+    display: none;
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    background: #fff;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    z-index: 99999;
+    font-size: 16px;
+    color: brown;
+}
+
+.coming-soon-message.show {
+    display: block;
+}
+
+@media (max-width: 767px) {
+    .coming-soon-message {
+        top: 20px;
+        left: 20px;
+        right: 20px;
+        text-align: center;
+        padding: 14px 20px;
+        font-size: 15px;
+        color: brown;
+    }
+}
+
+@media (max-width: 480px) {
+    .coming-soon-message {
+        top: 15px;
+        left: 15px;
+        right: 15px;
+        font-size: 14px;
+        padding: 12px 16px;
+        color: brown;
+    }
+}
+/* Active menu item */
+#navigation li > a.active {
+    color: #f4b400 !important;
+}
+
+/* Active dropdown parent */
+#navigation li.active-parent > a {
+    color: #f4b400 !important;
+}
+/* Active menu - desktop */
+#navigation li > a.active {
+    color: #f4b400 !important;
+}
+
+/* Active menu - mobile */
+.slicknav_nav li > a.active,
+.slicknav_nav li > .slicknav_item.active {
+    color: #f4b400 !important;
+}

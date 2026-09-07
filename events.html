@@ -210,10 +210,15 @@
                         </ul>
                     </li> -->
 
-                    <li>
-                        <a href="#">Pages <i class="ti-angle-down"></i></a>
-                        <ul class="submenu">
-                            <li><a href="elements.html">Elements</a></li>
+                    <li class="submenu-parent">
+                        <a href="#" id="pagesDropdown">
+                            EVENT <i class="ti-angle-down"></i>
+                        </a>
+
+                        <ul class="submenu" id="pagesSubmenu">
+                            <li>
+                                <a href="#" class="therapy-link">Therapy</a>
+                            </li>
                         </ul>
                     </li>
 
@@ -224,9 +229,9 @@
                     <li>
                         <a href="contact.html">Contact Us</a>
                     </li>
-                    <!-- <li>
-                        <a href="blog.html">Our Activities</a>
-                    </li> -->
+                    <li>
+                        <a href="events.html">Our Activities</a>
+                    </li>
 
                 </ul>
             </nav>
@@ -788,6 +793,76 @@
 
             });
 
+</script>
+<!-- Coming Soon Message -->
+    <div id="comingSoonMessage" class="coming-soon-message">
+        Coming Soon!
+    </div>
+
+    <!-- Your JavaScript -->
+<script>
+        $(document).on('click', '.therapy-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            $('#comingSoonMessage').addClass('show');
+
+            setTimeout(function () {
+                $('#comingSoonMessage').removeClass('show');
+            }, 3000);
+        });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    let currentPage = window.location.pathname.split("/").pop();
+
+    // If URL is just "/" or empty, consider it index.html
+    if (currentPage === "") {
+        currentPage = "index.html";
+    }
+
+    function setActiveMenu() {
+
+        // Desktop + Mobile menu links
+        const menuLinks = document.querySelectorAll(
+            '#navigation a, .slicknav_nav a'
+        );
+
+        menuLinks.forEach(function (link) {
+
+            const href = link.getAttribute("href");
+
+            if (!href || href === "#") {
+                return;
+            }
+
+            const linkPage = href.split("/").pop();
+
+            if (linkPage === currentPage) {
+                link.classList.add("active");
+
+                // If this is inside a dropdown, highlight the parent
+                const parentDropdown = link.closest(".slicknav_parent");
+
+                if (parentDropdown) {
+                    const parentLink = parentDropdown.querySelector(":scope > .slicknav_item");
+                    if (parentLink) {
+                        parentLink.classList.add("active");
+                    }
+                }
+            }
+        });
+    }
+
+    // Run once
+    setActiveMenu();
+
+    // SlickNav creates the mobile menu dynamically,
+    // so run again after it has been created.
+    setTimeout(setActiveMenu, 300);
+
+});
 </script>
 </body>
 </html>
