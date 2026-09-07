@@ -8565,3 +8565,144 @@ select {
         font-size: 21px;
     }
 }
+/* ==========================================================
+   MOBILE IMAGE & CAROUSEL FIX
+   Prevent excessive image cropping on mobile
+   ========================================================== */
+
+@media (max-width: 767px) {
+
+    /* General images */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* ----------------------------------
+       EVENT IMAGE CAROUSEL
+       ---------------------------------- */
+    .pet-event-image {
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        aspect-ratio: 16 / 10;
+        overflow: hidden;
+    }
+
+    .pet-image-carousel {
+        width: 100%;
+        height: 100%;
+    }
+
+    .pet-image-carousel img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+        transform: none;
+        background: #f4f4f1;
+    }
+
+    .pet-image-carousel img.active {
+        transform: none;
+    }
+
+    /* ----------------------------------
+       PAWDLI CONTENT IMAGES
+       ---------------------------------- */
+    .paw-intro-image,
+    .paw-card-image,
+    .paw-community-image {
+        width: 100%;
+        height: auto;
+        overflow: hidden;
+    }
+
+    .paw-intro-image img,
+    .paw-card-image img,
+    .paw-community-image img {
+        width: 100%;
+        height: auto;
+        max-height: none;
+        object-fit: contain;
+        object-position: center;
+        transform: none;
+    }
+
+    /* ----------------------------------
+       AUDIENCE IMAGES
+       ---------------------------------- */
+    .paw-audience-image {
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        aspect-ratio: 16 / 10;
+        overflow: hidden;
+    }
+
+    .paw-audience-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    /* ----------------------------------
+       ABOUT PAGE IMAGES
+       ---------------------------------- */
+    .pawdl-about-image {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .pawdl-about-image img {
+        width: 100%;
+        height: auto;
+        max-height: none;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    /* ----------------------------------
+       GALLERY IMAGES
+       ---------------------------------- */
+    .gallery_area .single_gallery .thumb img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+
+    /* ----------------------------------
+       REMOVE MOBILE IMAGE ZOOM
+       ---------------------------------- */
+    .paw-intro-card:hover img,
+    .paw-zigzag-card:hover img,
+    .paw-community-card:hover img {
+        transform: none;
+    }
+}
+
+
+/* EXTRA SMALL PHONES */
+@media (max-width: 480px) {
+
+    .pet-event-image {
+        aspect-ratio: 4 / 3;
+    }
+
+    .pet-image-carousel img {
+        object-fit: contain;
+    }
+
+    .paw-intro-image img,
+    .paw-card-image img,
+    .paw-community-image img,
+    .pawdl-about-image img {
+        height: auto;
+        object-fit: contain;
+    }
+}
