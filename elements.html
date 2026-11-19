@@ -95,6 +95,9 @@
                                         </li>
                                         <li><a href="service.html">services</a></li>
                                         <li><a href="contact.html">Contact</a></li>
+										<li>
+                       <a href="#" onclick="openRegistration(event)">ADD</a>
+                    </li>
                                     </ul>
                                 </nav>
                             </div>
@@ -923,5 +926,22 @@
          format: 'HH.MM'
      });
     </script>
+	<script>
+function openRegistration(event) {
+    event.preventDefault();
+
+    const accessToken = sessionStorage.getItem("accessToken");
+    const refreshToken = sessionStorage.getItem("refreshToken");
+    const isSuperuser = sessionStorage.getItem("isSuperuser");
+
+    // Check whether the user has an existing session
+    if (accessToken && refreshToken && isSuperuser === "true") {
+        window.location.href = "pawdli_event_registration.html";
+    } else {
+        // No valid stored session: go to login
+        window.location.href = "login.html";
+    }
+}
+</script>
 </body>
 </html>

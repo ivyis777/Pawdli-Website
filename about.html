@@ -232,7 +232,9 @@
                     <li>
                         <a href="events.html">Our Activities</a>
                     </li>
-
+                    <li>
+                       <a href="#" onclick="openRegistration(event)">ADD</a>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -1541,6 +1543,23 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(setActiveMenu, 300);
 
 });
+</script>
+<script>
+function openRegistration(event) {
+    event.preventDefault();
+
+    const accessToken = sessionStorage.getItem("accessToken");
+    const refreshToken = sessionStorage.getItem("refreshToken");
+    const isSuperuser = sessionStorage.getItem("isSuperuser");
+
+    // Check whether the user has an existing session
+    if (accessToken && refreshToken && isSuperuser === "true") {
+        window.location.href = "pawdli_event_registration.html";
+    } else {
+        // No valid stored session: go to login
+        window.location.href = "login.html";
+    }
+}
 </script>
 </body>
 

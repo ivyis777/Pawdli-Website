@@ -1,0 +1,659 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PAWdLI Event Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background: #e8ecf0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,.1);
+            text-align: center;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .title {
+            font-size: 22px;
+            color: #7A5648;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #7A5648;
+            margin: 0 0 20px;
+        }
+
+        .input-group {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .otp-btn-wrapper {
+            width: 100%;
+            margin: 5px 0 18px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .otp-btn {
+            background: #0066ff;
+            border: none;
+            color: #fff;
+            border-radius: 20px;
+            padding: 12px 22px;
+            cursor: pointer;
+        }
+
+        .otp-boxes {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .otp-boxes input {
+            width: 25%;
+            min-width: 0;
+            padding: 12px 5px;
+            text-align: center;
+            font-size: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .login-btn {
+            background: #7A5648;
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: .65;
+            cursor: not-allowed;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #7A5648;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 25px 22px;
+            }
+
+            .otp-boxes {
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<main class="container">
+
+    <section class="card">
+
+        <!-- Pawdli Logo -->
+        <img src="img/logo.png"
+             alt="PAWdLI Logo"
+             class="logo">
+
+        <h2 class="title">PAWdLI Event Login</h2>
+
+        <p class="subtitle">Sign in with your email</p>
+
+        <!-- Email -->
+        <div class="input-group">
+            <input
+                type="email"
+                id="emailInput"
+                placeholder="Enter your email"
+                autocomplete="email"
+                required
+            >
+        </div>
+
+        <!-- Get OTP -->
+        <div class="otp-btn-wrapper">
+            <button
+                type="button"
+                class="otp-btn"
+                id="sendOtpButton"
+                onclick="sendOTP()">
+                Get OTP
+            </button>
+        </div>
+
+        <!-- OTP Fields -->
+        <div class="otp-boxes">
+
+            <input
+                type="text"
+                inputmode="numeric"
+                maxlength="1"
+                id="otp1"
+                aria-label="OTP digit 1"
+                oninput="moveToNext(this, 'otp2')"
+            >
+
+            <input
+                type="text"
+                inputmode="numeric"
+                maxlength="1"
+                id="otp2"
+                aria-label="OTP digit 2"
+                oninput="moveToNext(this, 'otp3')"
+                onkeydown="moveToPrevious(event, 'otp1')"
+            >
+
+            <input
+                type="text"
+                inputmode="numeric"
+                maxlength="1"
+                id="otp3"
+                aria-label="OTP digit 3"
+                oninput="moveToNext(this, 'otp4')"
+                onkeydown="moveToPrevious(event, 'otp2')"
+            >
+
+            <input
+                type="text"
+                inputmode="numeric"
+                maxlength="1"
+                id="otp4"
+                aria-label="OTP digit 4"
+                onkeydown="moveToPrevious(event, 'otp3')"
+            >
+
+        </div>
+
+        <!-- Login -->
+        <button
+            type="button"
+            class="login-btn"
+            id="loginButton"
+            onclick="verifyOTP()">
+            Login
+        </button>
+
+        <a class="back-link" href="events.html">
+            Back to Events
+        </a>
+
+    </section>
+
+</main>
+
+<script>
+
+    // API URLs
+    const BASE_URL = "https://app.pawdli.com/user/send_otp/";
+    const LOGIN_URL = "https://app.pawdli.com/user/login_user/";
+
+    // Redirect after successful login
+    const REDIRECT_URL = "./pawdli_event_registration.html";
+
+
+    // Email validation
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+
+    // SEND OTP
+    async function sendOTP() {
+
+        const email = document.getElementById("emailInput").value.trim();
+
+        const button = document.getElementById("sendOtpButton");
+
+        if (!email) {
+            alert("Please enter your email.");
+            document.getElementById("emailInput").focus();
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+
+        const payload = {
+            email: email,
+            purpose: "login",
+            is_resend: false
+        };
+
+        button.disabled = true;
+        button.textContent = "Sending...";
+
+        try {
+
+            const response = await fetch(BASE_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const body = await response.json();
+
+            if (response.ok) {
+
+                alert("OTP sent to your email.");
+
+                document.getElementById("otp1").focus();
+
+            } else {
+
+                alert(
+                    "Error: " +
+                    (body.message || "Unable to send OTP.")
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error("Error while sending OTP:", error);
+
+            alert("Network error while sending OTP.");
+
+        } finally {
+
+            button.disabled = false;
+            button.textContent = "Get OTP";
+
+        }
+    }
+
+
+    // // VERIFY OTP AND LOGIN
+    // async function verifyOTP() {
+
+    //     const email = document.getElementById("emailInput").value.trim();
+
+    //     const otp = ["otp1", "otp2", "otp3", "otp4"]
+    //         .map(id => document.getElementById(id).value)
+    //         .join("");
+
+    //     const button = document.getElementById("loginButton");
+
+    //     if (!email || !isValidEmail(email)) {
+
+    //         alert("Please enter a valid email address.");
+
+    //         document.getElementById("emailInput").focus();
+
+    //         return;
+    //     }
+
+    //     if (!/^\d{4}$/.test(otp)) {
+
+    //         alert("Please enter the complete 4-digit OTP.");
+
+    //         return;
+    //     }
+
+    //     const payload = {
+    //         email: email,
+    //         otp: otp,
+    //         through_google: false
+    //     };
+
+    //     button.disabled = true;
+    //     button.textContent = "Verifying...";
+
+    //     try {
+
+    //         const response = await fetch(LOGIN_URL, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json"
+    //             },
+    //             body: JSON.stringify(payload)
+    //         });
+
+    //         const body = await response.json();
+
+    //         if (response.ok) {
+
+    //             console.log("Login response:", body);
+
+    //             const data = body.data || {};
+
+    //             const tokens = data.tokens || {};
+                
+    //             // Validate login response
+    //             if (
+    //                 !tokens.access ||
+    //                 !tokens.refresh ||
+    //                 data.user_id == null
+    //             ) {
+
+    //                 console.error(
+    //                     "Unexpected login response:",
+    //                     body
+    //                 );
+
+    //                 alert(
+    //                     "Login response is missing required user/token details."
+    //                 );
+
+    //                 return;
+    //             }
+
+    //             // Store authentication details
+    //             sessionStorage.setItem(
+    //                 "accessToken",
+    //                 tokens.access
+    //             );
+
+    //             sessionStorage.setItem(
+    //                 "refreshToken",
+    //                 tokens.refresh
+    //             );
+
+    //             sessionStorage.setItem(
+    //                 "userId",
+    //                 String(data.user_id)
+    //             );
+
+    //             if (data.radio_station != null) {
+
+    //                 sessionStorage.setItem(
+    //                     "radioStation",
+    //                     String(data.radio_station)
+    //                 );
+
+    //             }
+
+    //             alert("Login successful!");
+
+    //             // Redirect to Pawdli Event Registration page
+    //             window.location.href = REDIRECT_URL;
+
+    //         } else {
+
+    //             clearOTPFields();
+
+    //             alert(
+    //                 "Login failed: " +
+    //                 (body.message || "Invalid OTP")
+    //             );
+
+    //         }
+
+    //     } catch (error) {
+
+    //         console.error(
+    //             "Error during OTP verification:",
+    //             error
+    //         );
+
+    //         alert("Network error while verifying OTP.");
+
+    //     } finally {
+
+    //         button.disabled = false;
+    //         button.textContent = "Login";
+
+    //     }
+    // }
+    
+// VERIFY OTP AND LOGIN
+async function verifyOTP() {
+
+    const email = document.getElementById("emailInput").value.trim();
+
+    const otp = ["otp1", "otp2", "otp3", "otp4"]
+        .map(id => document.getElementById(id).value)
+        .join("");
+
+    const button = document.getElementById("loginButton");
+
+    if (!email || !isValidEmail(email)) {
+        alert("Please enter a valid email address.");
+        document.getElementById("emailInput").focus();
+        return;
+    }
+
+    if (!/^\d{4}$/.test(otp)) {
+        alert("Please enter the complete 4-digit OTP.");
+        return;
+    }
+
+    const payload = {
+        email: email,
+        otp: otp,
+        through_google: false
+    };
+
+    button.disabled = true;
+    button.textContent = "Verifying...";
+
+    try {
+
+        const response = await fetch(LOGIN_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const body = await response.json();
+
+        if (response.ok) {
+
+            console.log("Login response:", body);
+
+            const data = body.data || {};
+            const tokens = data.tokens || {};
+
+            // Validate login response
+            if (
+                !tokens.access ||
+                !tokens.refresh ||
+                data.user_id == null
+            ) {
+
+                console.error("Unexpected login response:", body);
+
+                alert("Login response is missing required user/token details.");
+
+                return;
+            }
+
+            // ==================================
+            // CHECK SUPERUSER PERMISSION
+            // ==================================
+
+            const isSuperuser =
+                data.is_superuser ??
+                data.user?.is_superuser ??
+                data.profile?.is_superuser;
+
+            // Deny access to normal users
+            if (isSuperuser !== true) {
+
+                sessionStorage.removeItem("accessToken");
+                sessionStorage.removeItem("refreshToken");
+                sessionStorage.removeItem("userId");
+                sessionStorage.removeItem("isSuperuser");
+
+                alert(
+                    "Access Denied! Only Superusers can access this page."
+                );
+
+                return;
+            }
+
+            // ==================================
+            // STORE AUTHENTICATION DETAILS
+            // ==================================
+
+            sessionStorage.setItem(
+                "accessToken",
+                tokens.access
+            );
+
+            sessionStorage.setItem(
+                "refreshToken",
+                tokens.refresh
+            );
+
+            sessionStorage.setItem(
+                "userId",
+                String(data.user_id)
+            );
+
+            sessionStorage.setItem(
+                "isSuperuser",
+                "true"
+            );
+
+            if (data.radio_station != null) {
+
+                sessionStorage.setItem(
+                    "radioStation",
+                    String(data.radio_station)
+                );
+
+            }
+
+            alert("Login successful!");
+
+            // Redirect only superusers
+            window.location.href = REDIRECT_URL;
+
+        } else {
+
+            clearOTPFields();
+
+            alert(
+                "Login failed: " +
+                (body.message || "Invalid OTP")
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error("Error during OTP verification:", error);
+
+        alert("Network error while verifying OTP.");
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "Login";
+
+    }
+}
+
+
+    // MOVE TO NEXT OTP FIELD
+    function moveToNext(current, nextFieldId) {
+
+        current.value = current.value.replace(/\D/g, "").slice(0, 1);
+
+        if (current.value.length === 1 && nextFieldId) {
+
+            document.getElementById(nextFieldId).focus();
+
+        }
+    }
+
+
+    // MOVE TO PREVIOUS OTP FIELD
+    function moveToPrevious(event, previousFieldId) {
+
+        if (
+            event.key === "Backspace" &&
+            !event.target.value
+        ) {
+
+            document.getElementById(previousFieldId).focus();
+
+        }
+    }
+
+
+    // CLEAR OTP FIELDS
+    function clearOTPFields() {
+
+        ["otp1", "otp2", "otp3", "otp4"].forEach(id => {
+
+            document.getElementById(id).value = "";
+
+        });
+
+        document.getElementById("otp1").focus();
+
+    }
+
+</script>
+
+</body>
+</html>

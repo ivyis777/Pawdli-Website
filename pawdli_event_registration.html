@@ -1,0 +1,1800 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAWdLI Event Registration</title>
+
+<style>
+:root {
+    --page-bg: #e8ecf0;
+    --brand-yellow: #F2A623;
+    --brand-brown: #7A5648;
+    --text: #34251f;
+    --muted: #75645d;
+    --border: #e3ddd8;
+    --white: #fff;
+    --shadow: 0 8px 24px rgba(0,0,0,.07);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 24px 16px;
+    background: var(--page-bg);
+    color: var(--text);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+button, input, textarea {
+    font: inherit;
+}
+
+.page {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    display: block;
+    width: 82px;
+    height: 82px;
+    margin: 0 auto 8px;
+    object-fit: contain;
+}
+
+h1 {
+    margin: 0;
+    color: var(--brand-brown);
+    font-size: clamp(23px, 3vw, 29px);
+}
+
+.subtitle {
+    margin: 7px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    min-width: 145px;
+    padding: 12px 20px;
+    border: 1px solid var(--brand-brown);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--brand-brown);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.tab-button.active {
+    background: var(--brand-brown);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(122,86,72,.18);
+}
+
+.panel {
+    width: 100%;
+    background: var(--white);
+    border-top: 6px solid var(--brand-yellow);
+    border-radius: 12px;
+    padding: clamp(17px, 3vw, 28px);
+    box-shadow: var(--shadow);
+}
+
+.panel[hidden] {
+    display: none;
+}
+
+.panel h2 {
+    margin: 0 0 18px;
+    color: var(--brand-brown);
+    font-size: 21px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.field {
+    min-width: 0;
+}
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    color: #59443b;
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.required {
+    color: #c0392b;
+}
+
+input, textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+    background: #fff;
+    color: var(--text);
+    font-size: 14px;
+}
+
+input:focus, textarea:focus {
+    border-color: var(--brand-brown);
+    box-shadow: 0 0 0 3px rgba(122,86,72,.12);
+}
+
+textarea {
+    min-height: 92px;
+    resize: vertical;
+}
+
+.primary-button,
+.secondary-button,
+.clear-button,
+.close-button {
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 650;
+}
+
+.primary-button {
+    width: 100%;
+    margin-top: 19px;
+    padding: 13px 16px;
+    background: var(--brand-brown);
+    color: #fff;
+}
+
+button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.list-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.list-toolbar h2 {
+    margin: 0;
+}
+
+.toolbar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.secondary-button {
+    padding: 9px 13px;
+    background: var(--brand-yellow);
+    color: var(--brand-brown);
+    font-size: 13px;
+}
+
+.filter-row {
+    display: grid;
+    grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr) auto;
+    align-items: end;
+    gap: 12px;
+    padding: 14px;
+    margin-bottom: 16px;
+    border-radius: 9px;
+    background: #fff8ed;
+}
+
+.clear-button {
+    min-height: 41px;
+    padding: 0 15px;
+    background: #eee7e2;
+    color: var(--brand-brown);
+    font-size: 13px;
+}
+
+.result-count {
+    margin: 0 0 10px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.registrations-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.registration-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 16px;
+    border: 1px solid #eee3d9;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.registration-person {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.person-name-button {
+    width: fit-content;
+    max-width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--brand-brown);
+    font-size: 15px;
+    font-weight: 700;
+    text-align: left;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+}
+
+.person-name-button:hover {
+    color: #4f3023;
+    text-decoration: underline;
+}
+
+.person-phone,
+.person-email {
+    color: var(--muted);
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.registration-date {
+    flex: 0 0 auto;
+    color: #8a7770;
+    font-size: 12px;
+    text-align: right;
+}
+
+.empty-state {
+    padding: 24px 12px;
+    color: var(--muted);
+    text-align: center;
+    border: 1px dashed #e5d9cf;
+    border-radius: 9px;
+    background: #fff;
+}
+
+.status-message {
+    display: none;
+    margin-top: 13px;
+    padding: 12px;
+    border-radius: 7px;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.status-message.success {
+    display: block;
+    color: #17633a;
+    background: #e9f7ef;
+}
+
+.status-message.error {
+    display: block;
+    color: #922b21;
+    background: #fdecea;
+}
+
+.back-home {
+    display: block;
+    width: fit-content;
+    margin: 19px auto 0;
+    color: var(--brand-brown);
+    font-size: 13px;
+    text-decoration: none;
+}
+
+/* DETAILS MODAL */
+
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(0,0,0,.5);
+}
+
+.modal-backdrop.open {
+    display: flex;
+}
+
+/* .modal {
+    width: 100%;
+    max-width: 580px;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 22px;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 12px 35px rgba(0,0,0,.22);
+} */
+
+/* .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 17px;
+} */
+
+/* PERSONAL DETAILS MODAL */
+
+.modal {
+    width: 100%;
+    max-width: 480px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 20px;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 12px 35px rgba(0,0,0,.22);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: var(--brand-brown);
+    font-size: 20px;
+}
+
+.close-button {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    background: #f1ece8;
+    color: var(--brand-brown);
+    font-size: 22px;
+}
+
+/* SINGLE ID CARD */
+
+.details-grid {
+    display: block;
+    width: 100%;
+}
+
+.id-card {
+    width: 100%;
+    padding: 22px;
+    border: 1px solid #eadfd2;
+    border-radius: 12px;
+    background: #fff8ed;
+    box-shadow: 0 4px 12px rgba(0,0,0,.06);
+}
+
+.id-card-name {
+    margin: 0 0 5px;
+    color: var(--brand-brown);
+    font-size: 21px;
+    font-weight: 750;
+    overflow-wrap: anywhere;
+}
+
+.id-card-subtitle {
+    margin-bottom: 18px;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-weight: 650;
+}
+
+.id-card-divider {
+    border: 0;
+    border-top: 1px solid #e5d9ca;
+    margin: 12px 0;
+}
+
+.id-card-row {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 9px 0;
+    min-width: 0;
+}
+
+.id-card-label {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+}
+
+.id-card-value {
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+@media(max-width:480px) {
+    .modal {
+        width: 100%;
+        max-width: 100%;
+        max-height: 85vh;
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .id-card {
+        padding: 17px;
+    }
+
+    .id-card-name {
+        font-size: 19px;
+    }
+
+    .id-card-value {
+        font-size: 13px;
+    }
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: var(--brand-brown);
+    font-size: 20px;
+}
+
+.close-button {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    background: #f1ece8;
+    color: var(--brand-brown);
+    font-size: 22px;
+}
+
+/* .details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 11px;
+} */
+
+/* .detail {
+    min-width: 0;
+    padding: 11px;
+    border-radius: 8px;
+    background: #fff8ed;
+    overflow-wrap: anywhere;
+}
+
+.detail.full {
+    grid-column: 1 / -1;
+}
+
+.detail-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.detail-value {
+    color: var(--text);
+    font-size: 14px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+} */
+
+@media(max-width:700px) {
+    body {
+        padding: 17px 12px;
+    }
+
+    .tabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .tab-button {
+        width: 100%;
+        min-width: 0;
+        padding: 12px 8px;
+    }
+
+    .list-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .toolbar-actions {
+        width: 100%;
+    }
+
+    .toolbar-actions button {
+        flex: 1;
+    }
+
+    .filter-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .clear-button {
+        grid-column: 1 / -1;
+    }
+}
+
+@media(max-width:480px) {
+    .logo {
+        width: 72px;
+        height: 72px;
+    }
+
+    .form-grid,
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .field.full,
+    .detail.full {
+        grid-column: auto;
+    }
+
+    .panel {
+        padding: 17px 14px;
+    }
+
+    .filter-row {
+        grid-template-columns: 1fr;
+    }
+
+    .clear-button {
+        grid-column: auto;
+    }
+
+    .modal {
+        padding: 17px 14px;
+    }
+
+    h1 {
+        font-size: 23px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<main class="page">
+
+<header class="page-header">
+
+    <img src="img/logo.png"
+         alt="PAWdLI Logo"
+         class="logo"
+         onerror="this.onerror=null;this.src='img/logo.jpeg';">
+
+    <h1>PAWdLI Event Registration</h1>
+
+    <p class="subtitle">
+        Register for the event and manage registrations
+    </p>
+
+</header>
+
+<nav class="tabs">
+
+    <button type="button"
+            class="tab-button active"
+            id="showAddButton">
+        ＋ Add Registration
+    </button>
+
+    <button type="button"
+            class="tab-button"
+            id="showListButton">
+        ☷ Registered List
+    </button>
+
+</nav>
+
+<!-- ADD REGISTRATION -->
+
+<section class="panel" id="addPanel">
+
+<h2>Add New Registration</h2>
+
+<form id="registrationForm">
+
+<div class="form-grid">
+
+    <div class="field">
+        <label for="name">
+            Name <span class="required">*</span>
+        </label>
+
+        <input type="text"
+               id="name"
+               name="name"
+               maxlength="255"
+               required>
+    </div>
+
+    <div class="field">
+        <label for="phone_number">
+            Phone Number <span class="required">*</span>
+        </label>
+
+        <input type="tel"
+               id="phone_number"
+               name="phone_number"
+               maxlength="10"
+               required>
+    </div>
+
+    <div class="field full">
+        <label for="email">Email</label>
+
+        <input type="email"
+               id="email"
+               name="email"
+               placeholder="Enter email address (required)">
+    </div>
+    <div class="field full">
+        <label for="location">Location</label>
+
+        <input type="text"
+               id="location"
+               name="location"
+               placeholder="Enter your location (optional)">
+    </div>
+
+    <!-- <div class="field full">
+        <label for="location">
+            Location <span class="required">*</span>
+        </label>
+
+        <textarea id="location"
+                  name="location"
+                  placeholder="Enter your location"
+                  required></textarea>
+    </div> -->
+
+    <div class="field full">
+        <label for="description">Description</label>
+
+        <textarea id="description"
+                  name="description"
+                  placeholder="Enter description (optional)"></textarea>
+    </div>
+
+</div>
+
+<button type="submit"
+        class="primary-button"
+        id="submitButton">
+    SAVE
+</button>
+
+<div id="formMessage"
+     class="status-message"
+     role="status"
+     aria-live="polite">
+</div>
+
+</form>
+</section>
+
+<!-- REGISTERED LIST -->
+
+<section class="panel" id="listPanel" hidden>
+
+<div class="list-toolbar">
+
+    <h2>Registered People</h2>
+
+    <div class="toolbar-actions">
+
+        <button type="button"
+                class="secondary-button"
+                id="refreshButton">
+            ↻ Refresh List
+        </button>
+
+        <button type="button"
+                class="secondary-button"
+                id="addAnotherButton">
+            ＋ Add Person
+        </button>
+
+    </div>
+
+</div>
+
+<div class="filter-row">
+
+    <div class="field">
+        <label for="dateFrom">From Date</label>
+        <input type="date" id="dateFrom">
+    </div>
+
+    <div class="field">
+        <label for="dateTo">To Date</label>
+        <input type="date" id="dateTo">
+    </div>
+
+    <button type="button"
+            class="clear-button"
+            id="clearDateFilter">
+        Clear Date Filter
+    </button>
+
+</div>
+
+<p class="result-count" id="resultCount">
+    Loading registrations...
+</p>
+
+<div class="registrations-list" id="registrationsList">
+
+    <div class="empty-state">
+        Loading registrations...
+    </div>
+
+</div>
+
+<div id="listMessage"
+     class="status-message"
+     role="status"
+     aria-live="polite">
+</div>
+
+</section>
+
+<a class="back-home" href="index.html">
+    ← Back to Home
+</a>
+
+</main>
+
+<!-- PERSON DETAILS MODAL -->
+
+<div class="modal-backdrop"
+     id="detailsModal"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="modalTitle">
+
+    <section class="modal">
+
+        <div class="modal-header">
+
+            <h2 id="modalTitle">
+                Registered Person Details
+            </h2>
+
+            <button type="button"
+                    class="close-button"
+                    id="closeModalButton"
+                    aria-label="Close">
+                ×
+            </button>
+
+        </div>
+
+        <div class="details-grid" id="detailsContent"></div>
+
+    </section>
+
+</div>
+
+<script>
+
+/* ==========================================
+   1. API CONFIGURATION
+========================================== */
+
+const ADD_API_URL =
+"https://app.pawdli.com/user/admin/petfed/leads/create/";
+
+const LIST_API_URL =
+"https://app.pawdli.com/user/admin/petfed/leads/";
+
+/*
+   Set the authentication scheme according
+   to your Django REST Framework configuration.
+
+   Common values:
+   Bearer - JWTAuthentication
+   Token  - TokenAuthentication
+*/
+
+const AUTH_SCHEME = "Bearer";
+
+/*
+   If your login page uses a different storage
+   key, add that key to TOKEN_KEYS.
+*/
+
+const TOKEN_KEYS = [
+    "accessToken",
+    "access_token",
+    "token",
+    "authToken",
+    "access"
+];
+
+
+/* ==========================================
+   2. AUTHENTICATION
+========================================== */
+
+function getAccessToken() {
+
+    for (const key of TOKEN_KEYS) {
+
+        const sessionToken = sessionStorage.getItem(key);
+
+        if (sessionToken) {
+            return sessionToken;
+        }
+
+        const localToken = localStorage.getItem(key);
+
+        if (localToken) {
+            return localToken;
+        }
+    }
+
+    return null;
+}
+
+
+function getAuthHeaders(json = false) {
+
+    const token = getAccessToken();
+
+    if (!token) {
+        throw new Error(
+            "Authentication token not found. Please login first."
+        );
+    }
+
+    const headers = {
+        "Accept": "application/json",
+        "Authorization": token.match(/^(Bearer|Token)\s/i)
+            ? token
+            : `${AUTH_SCHEME} ${token}`
+    };
+
+    if (json) {
+        headers["Content-Type"] = "application/json";
+    }
+
+    return headers;
+}
+
+
+/* ==========================================
+   3. COMMON ELEMENTS
+========================================== */
+
+let allRegistrations = [];
+let visibleRegistrations = [];
+
+let currentModalPerson = null;
+
+const form =
+document.getElementById("registrationForm");
+
+const submitButton =
+document.getElementById("submitButton");
+
+const registrationsList =
+document.getElementById("registrationsList");
+
+const formMessage =
+document.getElementById("formMessage");
+
+const listMessage =
+document.getElementById("listMessage");
+
+const resultCount =
+document.getElementById("resultCount");
+
+const detailsModal =
+document.getElementById("detailsModal");
+
+const detailsContent =
+document.getElementById("detailsContent");
+
+
+/* ==========================================
+   4. SECTION SWITCHING
+========================================== */
+
+function showSection(sectionName) {
+
+    const showAdd = sectionName === "add";
+
+    document.getElementById("addPanel").hidden = !showAdd;
+
+    document.getElementById("listPanel").hidden = showAdd;
+
+    document.getElementById("showAddButton")
+        .classList.toggle("active", showAdd);
+
+    document.getElementById("showListButton")
+        .classList.toggle("active", !showAdd);
+
+    if (!showAdd) {
+        loadRegistrations();
+    }
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+document.getElementById("showAddButton")
+.addEventListener("click", () => showSection("add"));
+
+document.getElementById("showListButton")
+.addEventListener("click", () => showSection("list"));
+
+document.getElementById("addAnotherButton")
+.addEventListener("click", () => showSection("add"));
+
+
+/* ==========================================
+   5. MESSAGE HANDLING
+========================================== */
+
+function showMessage(element, message, type) {
+
+    element.textContent = message;
+
+    element.className = "status-message " + type;
+}
+
+function clearMessage(element) {
+
+    element.textContent = "";
+
+    element.className = "status-message";
+}
+
+
+/* ==========================================
+   6. API RESPONSE HANDLING
+========================================== */
+
+async function handleApiResponse(response) {
+
+    const contentType =
+        response.headers.get("content-type") || "";
+
+    let data = {};
+
+    if (contentType.includes("application/json")) {
+
+        data = await response.json().catch(() => ({}));
+
+    } else {
+
+        const text = await response.text().catch(() => "");
+
+        data = { detail: text };
+    }
+
+    if (response.status === 401) {
+
+        throw new Error(
+            "401 Unauthorized: Authentication credentials were not accepted. Check your login token and authentication scheme."
+        );
+    }
+
+    if (response.status === 403) {
+
+        throw new Error(
+            "403 Forbidden: You do not have permission to access this API."
+        );
+    }
+
+    if (!response.ok) {
+
+        let errorMessage =
+            data.message ||
+            data.detail ||
+            data.error;
+
+        if (!errorMessage) {
+
+            errorMessage = Object.entries(data)
+                .map(([key, value]) => {
+
+                    return `${key}: ${
+                        Array.isArray(value)
+                            ? value.join(", ")
+                            : typeof value === "object"
+                                ? JSON.stringify(value)
+                                : value
+                    }`;
+
+                })
+                .join("\n");
+        }
+
+        throw new Error(
+            errorMessage || `API Error: ${response.status}`
+        );
+    }
+
+    return data;
+}
+
+
+/* ==========================================
+   7. RESPONSE NORMALIZATION
+========================================== */
+
+function normalizeListResponse(data) {
+
+    if (Array.isArray(data)) {
+        return data;
+    }
+
+    if (Array.isArray(data.results)) {
+        return data.results;
+    }
+
+    if (Array.isArray(data.data)) {
+        return data.data;
+    }
+
+    if (Array.isArray(data.leads)) {
+        return data.leads;
+    }
+
+    if (Array.isArray(data.data?.results)) {
+        return data.data.results;
+    }
+
+    if (Array.isArray(data.data?.leads)) {
+        return data.data.leads;
+    }
+
+    return [];
+}
+
+
+/* ==========================================
+   8. FIELD NORMALIZATION
+========================================== */
+
+/*
+   Supports common backend field names.
+   Update these mappings if your API serializer
+   uses different field names.
+*/
+
+function getPersonField(person, ...keys) {
+
+    for (const key of keys) {
+
+        const value = person?.[key];
+
+        if (
+            value !== undefined &&
+            value !== null
+        ) {
+            return value;
+        }
+    }
+
+    return "";
+}
+
+
+function getPersonName(person) {
+
+    return getPersonField(
+        person,
+        "name",
+        "full_name",
+        "customer_name"
+    );
+}
+
+
+function getPersonPhone(person) {
+
+    return getPersonField(
+        person,
+        "phone_number",
+        "mobile_number",
+        "phone",
+        "mobile"
+    );
+}
+
+
+function getPersonEmail(person) {
+
+    return getPersonField(
+        person,
+        "email",
+        "email_address",
+        "mail"
+    );
+}
+
+
+function getPersonDescription(person) {
+
+    return getPersonField(
+        person,
+        "description",
+        "remarks"
+    );
+}
+
+
+function getPersonLocation(person) {
+
+    return getPersonField(
+        person,
+        "location",
+        "address"
+    );
+}
+
+
+/* ==========================================
+   9. DATE FUNCTIONS
+========================================== */
+
+function getRegistrationDate(person) {
+
+    const rawDate = getPersonField(
+        person,
+        "created_at",
+        "createdAt",
+        "registration_date",
+        "registered_at",
+        "date_created"
+    );
+
+    if (!rawDate) {
+        return null;
+    }
+
+    const date = new Date(rawDate);
+
+    return Number.isNaN(date.getTime())
+        ? null
+        : date;
+}
+
+
+function formatDate(person) {
+
+    const date = getRegistrationDate(person);
+
+    if (!date) {
+        return "—";
+    }
+
+    return date.toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    });
+}
+
+
+/* ==========================================
+   10. HTML ESCAPE
+========================================== */
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === ""
+    ) {
+        return "—";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* ==========================================
+   11. GET REGISTRATIONS FROM DATABASE
+========================================== */
+
+async function loadRegistrations() {
+
+    clearMessage(listMessage);
+
+    registrationsList.innerHTML =
+        '<div class="empty-state">Loading registrations...</div>';
+
+    resultCount.textContent =
+        "Loading registrations...";
+
+    try {
+
+        const response = await fetch(LIST_API_URL, {
+
+            method: "GET",
+
+            headers: getAuthHeaders()
+
+        });
+
+        const data = await handleApiResponse(response);
+
+        allRegistrations = normalizeListResponse(data);
+
+        allRegistrations.sort((a, b) => {
+
+            const dateA = getRegistrationDate(a);
+
+            const dateB = getRegistrationDate(b);
+
+            return (
+                (dateB ? dateB.getTime() : 0) -
+                (dateA ? dateA.getTime() : 0)
+            );
+        });
+
+        renderRegistrations();
+
+    } catch (error) {
+
+        console.error("Load error:", error);
+
+        allRegistrations = [];
+
+        visibleRegistrations = [];
+
+        resultCount.textContent =
+            "Unable to load registrations.";
+
+        registrationsList.innerHTML =
+            '<div class="empty-state">Could not load registrations.</div>';
+
+        showMessage(
+            listMessage,
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+/* ==========================================
+   12. RENDER REGISTRATION LIST
+========================================== */
+
+function renderRegistrations() {
+
+    const fromValue =
+        document.getElementById("dateFrom").value;
+
+    const toValue =
+        document.getElementById("dateTo").value;
+
+    if (fromValue && toValue && fromValue > toValue) {
+
+        resultCount.textContent =
+            "Invalid date range.";
+
+        registrationsList.innerHTML =
+            '<div class="empty-state">Please select a valid date range.</div>';
+
+        visibleRegistrations = [];
+
+        return;
+    }
+
+    visibleRegistrations = allRegistrations.filter(person => {
+
+        const date = getRegistrationDate(person);
+
+        if ((fromValue || toValue) && !date) {
+            return false;
+        }
+
+        if (fromValue) {
+
+            const fromDate =
+                new Date(fromValue + "T00:00:00");
+
+            if (date < fromDate) {
+                return false;
+            }
+        }
+
+        if (toValue) {
+
+            const toDate =
+                new Date(toValue + "T23:59:59.999");
+
+            if (date > toDate) {
+                return false;
+            }
+        }
+
+        return true;
+    });
+
+    resultCount.textContent =
+        `Showing ${visibleRegistrations.length} of ${allRegistrations.length} registrations`;
+
+    if (!visibleRegistrations.length) {
+
+        registrationsList.innerHTML =
+            '<div class="empty-state">No registrations found for the selected date range.</div>';
+
+        return;
+    }
+
+    registrationsList.innerHTML =
+        visibleRegistrations.map((person, index) => {
+
+            return `
+
+                <article class="registration-item">
+
+                    <div class="registration-person">
+
+                        <button type="button"
+                                class="person-name-button"
+                                data-person-index="${index}">
+
+                            ${escapeHtml(getPersonName(person))}
+
+                        </button>
+
+                        <span class="person-phone">
+
+                            ${escapeHtml(getPersonPhone(person))}
+
+                        </span>
+
+                        <span class="person-email">
+
+                            ${escapeHtml(getPersonEmail(person))}
+
+                        </span>
+
+                    </div>
+
+                    <span class="registration-date">
+
+                        ${escapeHtml(formatDate(person))}
+
+                    </span>
+
+                </article>
+
+            `;
+
+        }).join("");
+}
+
+
+/* ==========================================
+   13. ADD REGISTRATION TO DATABASE
+========================================== */
+
+async function addRegistration(payload) {
+
+    const response = await fetch(ADD_API_URL, {
+
+        method: "POST",
+
+        headers: getAuthHeaders(true),
+
+        body: JSON.stringify(payload)
+
+    });
+
+    return await handleApiResponse(response);
+}
+
+
+/* ==========================================
+   14. FORM SUBMISSION
+========================================== */
+
+form.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    clearMessage(formMessage);
+
+    if (!form.reportValidity()) {
+        return;
+    }
+
+    const payload = {
+
+        name: document.getElementById("name")
+            .value.trim(),
+
+        phone_number: document.getElementById("phone_number")
+            .value.trim(),
+
+        email: document.getElementById("email")
+            .value.trim() || null,
+
+        location: document.getElementById("location")
+            .value.trim(),
+
+        description: document.getElementById("description")
+            .value.trim() || null
+
+    };
+
+    if (
+        !payload.name ||
+        !payload.phone_number ||
+        !payload.location
+    ) {
+
+        showMessage(
+            formMessage,
+            "Please fill in all required fields.",
+            "error"
+        );
+
+        return;
+    }
+
+    submitButton.disabled = true;
+
+    submitButton.textContent = "Submitting...";
+
+    try {
+
+        const result = await addRegistration(payload);
+
+        showMessage(
+            formMessage,
+            result.message ||
+            "Registration saved successfully in the database.",
+            "success"
+        );
+
+        form.reset();
+
+        await loadRegistrations();
+
+        showSection("list");
+
+    } catch (error) {
+
+        console.error("Registration error:", error);
+
+        showMessage(
+            formMessage,
+            error.message ||
+            "Unable to submit registration.",
+            "error"
+        );
+
+    } finally {
+
+        submitButton.disabled = false;
+
+        submitButton.textContent =
+            "Submit Registration";
+    }
+
+});
+
+
+/* ==========================================
+   15. VIEW PERSON DETAILS
+========================================== */
+
+registrationsList.addEventListener(
+    "click",
+    function(event) {
+
+        const button =
+            event.target.closest(".person-name-button");
+
+        if (!button) {
+            return;
+        }
+
+        const index = Number(
+            button.dataset.personIndex
+        );
+
+        const person =
+            visibleRegistrations[index];
+
+        if (person) {
+
+            showPersonDetails(person);
+
+        }
+
+    }
+);
+
+
+/*
+   IMPORTANT:
+   This function fixes your error:
+
+   showPersonDetails is not defined
+
+   Only these five fields are displayed.
+*/
+
+// function showPersonDetails(person) {
+
+//     if (!person) {
+//         return;
+//     }
+
+//     currentModalPerson = person;
+
+//     const fields = [
+
+//         ["Name", getPersonName(person)],
+
+//         ["Phone", getPersonPhone(person)],
+
+//         ["Email", getPersonEmail(person)],
+
+//         ["Description", getPersonDescription(person)],
+
+//         ["Location", getPersonLocation(person)]
+
+//     ];
+
+//     detailsContent.innerHTML =
+//         fields.map(([label, value]) => {
+
+//             const full =
+//                 ["Description", "Location"].includes(label);
+
+//             return `
+
+//                 <div class="detail ${full ? "full" : ""}">
+
+//                     <span class="detail-label">
+
+//                         ${escapeHtml(label)}
+
+//                     </span>
+
+//                     <span class="detail-value">
+
+//                         ${escapeHtml(value)}
+
+//                     </span>
+
+//                 </div>
+
+//             `;
+
+//         }).join("");
+
+//     detailsModal.classList.add("open");
+
+//     document.body.style.overflow = "hidden";
+
+//     document.getElementById("closeModalButton").focus();
+// }
+
+function showPersonDetails(person) {
+
+    const fields = [
+        ["PHONE", person.phone_number || person.phone],
+        ["EMAIL", person.email],
+        ["DESCRIPTION", person.description],
+        ["LOCATION", person.location]
+    ];
+
+    detailsContent.innerHTML = `
+        <div class="id-card">
+
+            <h3 class="id-card-name">
+                ${escapeHtml(person.name)}
+            </h3>
+
+            <div class="id-card-subtitle">
+                PAWdLI EVENT REGISTRATION
+            </div>
+
+            <hr class="id-card-divider">
+
+            ${fields.map(([label, value]) => `
+                <div class="id-card-row">
+
+                    <span class="id-card-label">
+                        ${escapeHtml(label)}
+                    </span>
+
+                    <span class="id-card-value">
+                        ${escapeHtml(value)}
+                    </span>
+
+                </div>
+            `).join("")}
+
+        </div>
+    `;
+
+    detailsModal.classList.add("open");
+
+    document.getElementById("closeModalButton").focus();
+}
+/* ==========================================
+   16. CLOSE DETAILS MODAL
+========================================== */
+
+function closeDetailsModal() {
+
+    detailsModal.classList.remove("open");
+
+    document.body.style.overflow = "";
+
+    currentModalPerson = null;
+}
+
+document.getElementById("closeModalButton")
+.addEventListener("click", closeDetailsModal);
+
+
+detailsModal.addEventListener("click", function(event) {
+
+    if (event.target === detailsModal) {
+
+        closeDetailsModal();
+
+    }
+});
+
+
+document.addEventListener("keydown", function(event) {
+
+    if (event.key === "Escape") {
+
+        closeDetailsModal();
+
+    }
+
+});
+
+
+/* ==========================================
+   17. REFRESH REGISTRATIONS
+========================================== */
+
+document.getElementById("refreshButton")
+.addEventListener("click", function() {
+
+    loadRegistrations();
+
+});
+
+
+/* ==========================================
+   18. DATE FILTER
+========================================== */
+
+document.getElementById("dateFrom")
+.addEventListener("change", renderRegistrations);
+
+
+document.getElementById("dateTo")
+.addEventListener("change", renderRegistrations);
+
+
+document.getElementById("clearDateFilter")
+.addEventListener("click", function() {
+
+    document.getElementById("dateFrom").value = "";
+
+    document.getElementById("dateTo").value = "";
+
+    renderRegistrations();
+
+});
+
+
+/* ==========================================
+   19. INITIALIZATION
+========================================== */
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    if (!getAccessToken()) {
+
+        showMessage(
+            formMessage,
+            "Please login to access event registration. Authentication token was not found.",
+            "error"
+        );
+
+        registrationsList.innerHTML =
+            '<div class="empty-state">Please login to view registrations.</div>';
+
+        resultCount.textContent =
+            "Login required.";
+
+        return;
+    }
+
+    loadRegistrations();
+
+});
+
+</script>
+
+</body>
+</html>

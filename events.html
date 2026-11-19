@@ -24,6 +24,56 @@
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/slicknav.css">
     <link rel="stylesheet" href="css/style1.css">
+
+    <style>
+
+    /* EVENT dropdown: show Therapy and ADD vertically, one below another */
+    #navigation > li.submenu-parent {
+        position: relative;
+    }
+
+    #navigation > li.submenu-parent > ul.submenu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: 180px;
+        margin: 0;
+        padding: 6px 0;
+        background: #ffffff;
+        z-index: 99999;
+        list-style: none;
+        flex-direction: column;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    }
+
+    #navigation > li.submenu-parent:hover > ul.submenu,
+    #navigation > li.submenu-parent:focus-within > ul.submenu {
+        display: block !important;
+    }
+
+    #navigation > li.submenu-parent > ul.submenu > li {
+        display: block !important;
+        float: none !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        clear: both;
+    }
+
+    #navigation > li.submenu-parent > ul.submenu > li > a {
+        display: block !important;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px 22px !important;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    #navigation > li.submenu-parent > ul.submenu > li > a:hover {
+        background: #f5f5f5;
+    }
+    </style>
     <!-- <link rel="stylesheet" href="css/responsive.css"> -->
 </head>
 
@@ -219,6 +269,9 @@
                             <li>
                                 <a href="#" class="therapy-link">Therapy</a>
                             </li>
+                            <!-- <li>
+                                <a href="login.html">ADD</a>
+                            </li> -->
                         </ul>
                     </li>
 
@@ -231,6 +284,9 @@
                     </li>
                     <li>
                         <a href="events.html">Our Activities</a>
+                    </li>
+                     <li>
+                       <a href="#" onclick="openRegistration(event)">ADD</a>
                     </li>
 
                 </ul>
@@ -252,7 +308,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="bradcam_text text-center">
-                        <h3>PAWDL PET EVENTS</h3>
+                        <h3>PAWdLI PET EVENTS</h3>
                         <h1>Moments We’ve Shared</h1>
                          <p>
                 A collection of the events we attended, the people we met,
@@ -863,6 +919,23 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(setActiveMenu, 300);
 
 });
+</script>
+<script>
+function openRegistration(event) {
+    event.preventDefault();
+
+    const accessToken = sessionStorage.getItem("accessToken");
+    const refreshToken = sessionStorage.getItem("refreshToken");
+    const isSuperuser = sessionStorage.getItem("isSuperuser");
+
+    // Check whether the user has an existing session
+    if (accessToken && refreshToken && isSuperuser === "true") {
+        window.location.href = "pawdli_event_registration.html";
+    } else {
+        // No valid stored session: go to login
+        window.location.href = "login.html";
+    }
+}
 </script>
 </body>
 </html>
